@@ -1,87 +1,115 @@
+<?php
+require_once 'Database.php';
+$pdo = Database::getInstance()->getConnection();
+
+
+$stmt = $pdo->prepare("SELECT * FROM reviews ORDER BY created_at DESC LIMIT 5");
+$stmt->execute();
+$reviews = $stmt->fetchAll();
+?>
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HotelManager – Tema 1</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
-      color: #333;
-      margin: 40px;
-      line-height: 1.6;
-    }
-    h1, h2 {
-      color: #004080;
-    }
-    header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    section {
-      background: white;
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    }
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      margin-top: 10px;
-    }
-    table, th, td {
-      border: 1px solid #aaa;
-    }
-    th, td {
-      padding: 8px;
-      text-align: left;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HotelManager</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="index.css">
 </head>
+
 <body>
-  <header>
-    <h1>HotelManager</h1>
-  </header>
 
- <section>
-    <h2>1. Descriere generală a aplicației</h2>
-    <p>Aplicația <strong>HotelManager</strong> este o platformă web pentru gestionarea activităților unui hotel. Ea permite administrarea camerelor, rezervărilor, clienților și serviciilor suplimentare, cum ar fi curățenia. Aplicația oferă roluri diferite pentru utilizatori: <strong>client</strong>, <strong>angajat</strong> și <strong>manager</strong>, pentru a eficientiza procesul de rezervare și gestionare a hotelului.</p>
-</section>
+<?php include 'navbar.php'; ?>
 
-   <section>
-    <h2>Arhitectura aplicației</h2>
+<header class="bg-primary text-white text-center py-5">
+    <h1>HotelM</h1>
+    <p class="lead">Confort. Eleganță. Experiență premium.</p>
+</header>
 
-    <p>Aplicația HotelManager gestionează mai multe entități care interacționează pentru a permite rezervarea camerelor și solicitarea serviciilor:</p>
-    
-    <p><strong>Client:</strong> poate face rezervări și poate solicita servicii suplimentare, precum curățenia camerei.</p>
-    <p><strong>Employee (angajat):</strong> primește cereri de curățenie și marchează camerele ca finalizate.</p>
-    <p><strong>Manager:</strong> aprobă sau respinge rezervările, gestionează camerele și alocă angajați pentru curățenie.</p>
-    <p><strong>Cameră:</strong> poate fi rezervată de clienți și asociată cu cereri de curățenie; statusul poate fi modificat de manager.</p>
-    <p><strong>Rezervare:</strong> leagă un client de o cameră pentru o anumită perioadă; rezervările sunt aprobate sau respinse de manager.</p>
-    <p><strong>CleaningRequest (cerere curățenie):</strong> cererea unui client pentru curățenie; angajatul este alocat pentru realizarea acesteia și statusul se actualizează pe parcurs.</p>
+<div class="container">
+    <section class="mb-5">
+        <h2 class="mb-3 text-center">Despre HotelM</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <p>
+                    HotelM este un hotel modern situat într-o zonă liniștită, ideal pentru familii,
+                    cupluri sau turiști care caută relaxare și servicii premium.
+                </p>
+                <p>
+                    Oferim camere confortabile, facilități moderne și personal profesionist. 
+                    Restaurantul nostru servește preparate diverse pentru toate gusturile.
+                </p>
+                <p>
+                  Cu ajutorul aplicației HotelManager, clienții pot vizualiza meniul zilnic, solicita servicii de curățenie pentru cameră și realimentarea minibarului.
+                   Astfel, aceștia își pot personaliza șederea și se bucură de o experiență cât mai confortabilă și plăcută în hotel.
+                </p>
+            </div>
+            <div class="col-md-6">
+                <div id="hotelCarousel" class="carousel slide shadow rounded" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="poze/hotel1.jpg" class="d-block w-100" alt="Hotel picture 1">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="poze/hotel2.jpg" class="d-block w-100" alt="Hotel picture 2">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="poze/hotel3.jpg" class="d-block w-100" alt="Hotel picture 3">
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#hotelCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#hotelCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <p>Relațiile principale și fluxurile aplicației sunt următoarele:</p>
-    <ul>
-      <li>Un client poate avea mai multe rezervări, fiecare legată de o cameră specifică.</li>
-      <li>După rezervare, clientul poate solicita curățenie; angajatul este alocat pentru realizarea acesteia.</li>
-      <li>Managerul poate modifica statusul camerelor, aproba rezervări și vizualiza raportul cererilor de curățenie.</li>
-      <li>Baza de date relațională păstrează toate legăturile între utilizatori, camere, rezervări și cereri de curățenie, asigurând consistența informațiilor.</li>
-    </ul>
-</section>
+    <!-- REVIEW-URI -->
+    <section class="mb-5">
+        <h2 class="text-center mb-3">Ce spun clienții</h2>
 
-<section>
-    <h2>5. Soluția de implementare</h2>
-    <p>Aplicația va fi implementată folosind:</p>
-    <ul>
-      <li><strong>Frontend:</strong> HTML, CSS, JavaScript</li>
-      <li><strong>Backend:</strong> PHP pentru autentificare, roluri și procesarea cererilor</li>
-      <li><strong>Bază de date:</strong> MySQL</li>
-      <li><strong>Hosting:</strong> InfinityFree (versiune gratuită)</li>
-      <li><strong>Control versiuni:</strong> GitHub</li>
-    </ul>
-</section>
+        <?php if (count($reviews) === 0): ?>
+            <p class="text-center">Nu există review-uri momentan.</p>
+        <?php else: ?>
+            <div class="row">
+                <?php foreach ($reviews as $rev): ?>
+                    <div class="col-md-4 mb-3">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    ⭐ <?= htmlspecialchars($rev['rating']) ?>/5
+                                </h5>
+                                <p class="card-text">
+                                    <?= htmlspecialchars($rev['comment']) ?>
+                                </p>
+                                <small class="text-muted">
+                                    — <?= htmlspecialchars($rev['user_name']) ?>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+        <div class="text-center mt-3">
+            <a href="reviews.php" class="btn btn-primary">Vezi toate review-urile</a>
+        </div>
+    </section>
+
+</div>
+
+<footer class="footer">
+    &copy; 2025 HotelManager.
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
