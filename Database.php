@@ -4,10 +4,10 @@ class Database {
     private PDO $connection;
 
  
-    private string $host = "localhost";
-    private string $dbName = "hotel_db";
-    private string $username = "root";
-    private string $password = "";
+    private string $host = "sql100.infinityfree.com";
+    private string $dbName = "if0_40383041_hotel";
+    private string $username = "if0_40383041";
+    private string $password = "hRCD0IxY9KCT";
 
     private array $options = [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
