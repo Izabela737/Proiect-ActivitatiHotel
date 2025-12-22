@@ -3,6 +3,12 @@ session_start();
 require_once 'Database.php';
 $pdo = Database::getInstance()->getConnection();
 
+// ✅ Generare token anti-bot/CSRF pentru rezervări
+if (!isset($_SESSION['bot_token'])) {
+    $_SESSION['bot_token'] = bin2hex(random_bytes(16));
+}
+$bot_token = $_SESSION['bot_token'];
+
 
 $loginMessage = "";
 $registerMessage = "";
@@ -143,28 +149,28 @@ if ($check_in && $check_out && strtotime($check_out) > strtotime($check_in)) {
         <span class="close-btn" onclick="closeReservationModal()">&times;</span>
         <h4>Rezervă Camera</h4>
         <form id="reservationForm">
-    <input type="hidden" name="room_id" id="room_id" value="">
-    <input type="hidden" name="check_in" id="modal_check_in">
-    <input type="hidden" name="check_out" id="modal_check_out">
-    <input type="hidden" name="total_price" id="total_price_input">
-    <label for="meal_plan">Meal Plan:</label>
-    <select name="meal_plan" id="meal_plan" required>
-        <option value="no_meal" data-price="0">No meal</option>
-        <option value="breakfast" data-price="20">Breakfast (+20 RON)</option>
-        <option value="half_board" data-price="60">Half Board (+60 RON)</option>
-        <option value="all_inclusive" data-price="100">All Inclusive (+100 RON)</option>
-    </select>
-    <hr>
-    <label>Preț total:</label>
-    <div id="total_price" style="font-size:20px; font-weight:bold;">0 RON</div>
-    <button type="submit" id="submitReservation">Confirmă rezervarea</button>
-</form>
-
+            <input type="hidden" name="room_id" id="room_id" value="">
+            <input type="hidden" name="check_in" id="modal_check_in">
+            <input type="hidden" name="check_out" id="modal_check_out">
+            <input type="hidden" name="total_price" id="total_price_input">
+            <!-- ✅ Token anti-bot -->
+            <input type="hidden" name="bot_token" value="<?= $bot_token ?>">
+            <label for="meal_plan">Meal Plan:</label>
+            <select name="meal_plan" id="meal_plan" required>
+                <option value="no_meal" data-price="0">No meal</option>
+                <option value="breakfast" data-price="20">Breakfast (+20 RON)</option>
+                <option value="half_board" data-price="60">Half Board (+60 RON)</option>
+                <option value="all_inclusive" data-price="100">All Inclusive (+100 RON)</option>
+            </select>
+            <hr>
+            <label>Preț total:</label>
+            <div id="total_price" style="font-size:20px; font-weight:bold;">0 RON</div>
+            <button type="submit" id="submitReservation">Confirmă rezervarea</button>
+        </form>
     </div>
 </div>
 
 <script>
-
 const modalCheckIn = document.getElementById('modal_check_in');
 const modalCheckOut = document.getElementById('modal_check_out');
 const mealPlan = document.getElementById('meal_plan');
@@ -218,6 +224,7 @@ function checkLogin(event, roomId, price){
         return false;
     <?php endif; ?>
 }
+
 const checkInInput = document.getElementById('check_in');
 const checkOutInput = document.getElementById('check_out');
 
@@ -263,7 +270,6 @@ reservationForm.addEventListener('submit', function(e) {
         console.error(error);
     });
 });
-
 </script>
 
 </body>

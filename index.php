@@ -3,7 +3,12 @@ require_once 'Database.php';
 $pdo = Database::getInstance()->getConnection();
 
 
-$stmt = $pdo->prepare("SELECT * FROM reviews ORDER BY created_at DESC LIMIT 5");
+$stmt = $pdo->prepare("
+    SELECT * FROM reviews 
+    ORDER BY rating DESC, created_at DESC 
+    LIMIT 3
+");
+
 $stmt->execute();
 $reviews = $stmt->fetchAll();
 ?>
@@ -82,15 +87,21 @@ $reviews = $stmt->fetchAll();
                     <div class="col-md-4 mb-3">
                         <div class="card shadow-sm h-100">
                             <div class="card-body">
-                                <h5 class="card-title">
-                                    ⭐ <?= htmlspecialchars($rev['rating']) ?>/5
-                                </h5>
-                                <p class="card-text">
-                                    <?= htmlspecialchars($rev['comment']) ?>
-                                </p>
-                                <small class="text-muted">
-                                    — <?= htmlspecialchars($rev['user_name']) ?>
-                                </small>
+                                 <div class="mb-2">
+                <strong style="font-size: 1.1rem; color: #ffffff;">
+                    <?= htmlspecialchars($rev['user_name']) ?>
+                </strong>
+            </div> 
+
+            <hr style="border-color:#ffffff40;">
+
+            <!-- RATING + COMENTARIU -->
+            <h5 class="card-title" style="color:#ffd700;">⭐ <?= $rev['rating'] ?>/5</h5>
+
+            <p class="card-text" style="color:#e6e6e6;">
+                <?= htmlspecialchars($rev['comment']) ?>
+            </p>
+
                             </div>
                         </div>
                     </div>
@@ -99,7 +110,7 @@ $reviews = $stmt->fetchAll();
         <?php endif; ?>
 
         <div class="text-center mt-3">
-            <a href="reviews.php" class="btn btn-primary">Vezi toate review-urile</a>
+            <a href="review.php" class="btn btn-primary">Vezi toate review-urile</a>
         </div>
     </section>
 

@@ -1,74 +1,74 @@
+/* footer_fix.css - copiază tot și înlocuiește CSS-ul tău */
 
-body {
+/* ===== RESET COMPLET ===== */
+* {
     margin: 0;
     padding: 0;
-    background-color:#e6e6e6;
-    color: #e6e6e6;
-    font-family: "Segoe UI", sans-serif;
-    line-height: 1.6;
+    box-sizing: border-box;
 }
 
-header, section, footer {
+html, body {
+    height: 100%;
     margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* ===== STRUCTURA PRINCIPALĂ ===== */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #e6e6e6;
+    color: #333;
+}
+
+/* ===== HEADER ===== */
+.navbar {
+    background-color: #081525 !important;
+    padding: 10px 20px !important;
+    margin: 0 !important;
+}
+
+/* ===== CONTENIT PRINCIPAL - TREBUIE SĂ OCUPE SPAȚIU ===== */
+.main-wrapper {
+    flex: 1 0 auto; /* ← ASTA E CHEIA! */
+    width: 100%;
+    padding: 20px 0;
 }
 
 .container {
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-}
-.container section:first-of-type {
-    margin-top: 50px;  
-}
-.navbar {
-    margin: 0 !important;       
-    padding: 10px 20px !important; 
-    background-color: #081525 !important;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
 }
 
-.navbar .container-fluid {
-    padding-left: 0;
-    padding-right: 0;
-}
-
-header.bg-primary {
-    background-color: #65708c!important;
-    text-align: center;
-    padding: 20px 10px;
-}
-
-footer {
-    margin-top: 0 !important;
-    padding: 20px;
-    background-color: #000e1a;
-    text-align: center;
-    font-size: 0.9rem;
-    color: #bfcde0;
-}
-
+/* ===== SECȚIUNILE TALE ===== */
 section {
     background-color: #162235;
     padding: 50px 35px;
     border-radius: 12px;
     margin-bottom: 30px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    color: #e6e6e6;
 }
 
+/* ===== FOOTER - SIGUR JOS ===== */
+.site-footer {
+    background-color: #000e1a;
+    color: #bfcde0;
+    text-align: center;
+    padding: 25px 20px;
+    width: 100%;
+    flex-shrink: 0; /* ← IMPORTANT: nu se micșorează */
+    margin-top: auto; /* ← ASTA îl împinge jos */
+}
+
+/* ===== STILURILE TALE ORIGINALE (păstrează-le) ===== */
 .carousel-inner img {
     height: 350px;
     object-fit: cover;
     border-radius: 12px;
-}
-
-.carousel {
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-.carousel-control-prev-icon,
-.carousel-control-next-icon {
-    filter: brightness(0) invert(1);
 }
 
 .card {
@@ -78,16 +78,12 @@ section {
     color: #e6e6e6;
     transition: transform .2s ease, box-shadow .2s ease;
 }
+
 .card:hover {
     transform: translateY(-6px);
     box-shadow: 0 8px 25px rgba(0,0,0,0.5);
 }
 
-.card-title {
-    font-size: 1.2rem;
-    color: #ffd700; 
-    font-weight: 600;
-}
 .btn-primary {
     background-color: #0d47a1;
     border: none;
@@ -95,6 +91,6 @@ section {
     font-weight: 600;
     border-radius: 8px;
 }
-.btn-primary:hover {
-    background-color: #65708c;
+.pending-text {
+    color: white !important;
 }
